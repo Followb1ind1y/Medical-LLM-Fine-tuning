@@ -1,0 +1,23 @@
+# 基础框架
+# torch @ https://download.pytorch.org/whl/cu124/torch-2.6.0%2Bcu124-cp311-cp311-linux_x86_64.whl
+transformers==4.49.0
+
+# 量化与高效训练
+bitsandbytes==0.45.3
+peft==0.14.0
+accelerate==1.5.2
+
+# 分布式训练
+deepspeed
+
+# 训练工具
+trl==0.15.2
+datasets==3.4.1
+huggingface-hub==0.28.1
+tqdm==4.67.1
+
+# 基础数据处理
+numpy==2.0.2
+pandas==2.2.2
+
+tensorboard==2.18.0
