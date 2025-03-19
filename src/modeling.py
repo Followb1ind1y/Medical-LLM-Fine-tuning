@@ -20,8 +20,10 @@ def load_model_and_tokenizer(model_name="meta-llama/Meta-Llama-3-8B"):
         trust_remote_code=True,
         padding_side="right"
     )
+    # Add special tokens
+    new_tokens = ["<|eot_id|>"]  # 只添加真正的新token
     tokenizer.add_special_tokens({
-        "additional_special_tokens": ["<|begin_of_text|>", "<|eot_id|>"]
+        "additional_special_tokens": new_tokens
     })
     tokenizer.pad_token = tokenizer.eos_token
 
@@ -41,5 +43,6 @@ def load_model_and_tokenizer(model_name="meta-llama/Meta-Llama-3-8B"):
         trust_remote_code=True
     )
     model.config.use_cache = False
+    model.resize_token_embeddings(len(tokenizer))
     
     return model, tokenizer

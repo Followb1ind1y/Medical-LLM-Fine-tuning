@@ -49,6 +49,10 @@ bash miniconda.sh -b -p $HOME/miniconda
 echo 'export PATH="$HOME/miniconda/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 
+conda create -n myenv python=3.11 -y
+conda init
+conda activate myenv
+
 pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128
 
 pip install transformers bitsandbytes peft accelerate deepspeed trl datasets huggingface-hub tqdm tensorboard
