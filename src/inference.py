@@ -78,5 +78,6 @@ def interactive_test(model, tokenizer, input, max_length=512, temperature=0.7):
         outputs = model.generate(**inputs, generation_config=generation_config)
             
     raw_output = tokenizer.decode(outputs[0], skip_special_tokens=False)
-    print(refine_output(raw_output))
+    # print(refine_output(raw_output))
+    return refine_output(raw_output)
         
