@@ -8,11 +8,11 @@ from src.inference import interactive_test
 from trl import SFTTrainer, DataCollatorForCompletionOnlyLM
 
 import os
-# os.environ["MASTER_ADDR"] = "localhost"
-# os.environ["MASTER_PORT"] = "9994"  # modify if RuntimeError: Address already in use
-# os.environ["RANK"] = "0"
-# os.environ["LOCAL_RANK"] = "0"
-# os.environ["WORLD_SIZE"] = "1"
+os.environ["MASTER_ADDR"] = "localhost"
+os.environ["MASTER_PORT"] = "9994"  # modify if RuntimeError: Address already in use
+os.environ["RANK"] = "0"
+os.environ["LOCAL_RANK"] = "0"
+os.environ["WORLD_SIZE"] = "1"
 
 def main(args):
     if args.resume_from_checkpoint:

@@ -38,4 +38,25 @@ med-llm-finetuning/
 ```
 
 ---
-##
+## **sudo Notes**
+
+```
+nvcc --version
+nvidia-smi
+
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+bash miniconda.sh -b -p $HOME/miniconda
+echo 'export PATH="$HOME/miniconda/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128
+
+pip install transformers bitsandbytes peft accelerate deepspeed trl datasets huggingface-hub tqdm tensorboard
+
+export HF_TOKEN="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"
+
+conda env export > environment.yml
+conda env create -f environment.yml
+
+watch -n 1 nvidia-smi
+```

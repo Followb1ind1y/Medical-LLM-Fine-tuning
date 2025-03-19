@@ -8,7 +8,7 @@ from transformers import TrainingArguments
 output_dir = "./med-qa-llama"
 
 # Number of training epochs
-num_train_epochs = 10
+num_train_epochs = 3
 
 # Batch size per GPU for training
 per_device_train_batch_size = 2
@@ -59,8 +59,8 @@ def get_training_args(output_dir="./output", num_train_epochs=1):
     return TrainingArguments(
         output_dir=output_dir,
         num_train_epochs=num_train_epochs,
-        # per_device_train_batch_size=per_device_train_batch_size,
-        # gradient_accumulation_steps=gradient_accumulation_steps,
+        per_device_train_batch_size=per_device_train_batch_size,
+        gradient_accumulation_steps=gradient_accumulation_steps,
         max_grad_norm=max_grad_norm,
         optim=optim,
         weight_decay=weight_decay,
