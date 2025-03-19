@@ -7,12 +7,12 @@ from src.modeling import load_model_and_tokenizer
 from src.inference import interactive_test
 from trl import SFTTrainer, DataCollatorForCompletionOnlyLM
 
-import os
-os.environ["MASTER_ADDR"] = "localhost"
-os.environ["MASTER_PORT"] = "9994"  # modify if RuntimeError: Address already in use
-os.environ["RANK"] = "0"
-os.environ["LOCAL_RANK"] = "0"
-os.environ["WORLD_SIZE"] = "1"
+# import os
+# os.environ["MASTER_ADDR"] = "localhost"
+# os.environ["MASTER_PORT"] = "9994"  # modify if RuntimeError: Address already in use
+# os.environ["RANK"] = "0"
+# os.environ["LOCAL_RANK"] = "0"
+# os.environ["WORLD_SIZE"] = "1"
 
 def main(args):
     if args.resume_from_checkpoint:
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     parser.add_argument("--eval_only", action="store_true", 
                        help="Only run evaluation on the test set")
     # 交互测试模式
-    # python train.py --test \--resume_from_checkpoint ./medqa-model \ --max_length 256 \ --temperature 0.7
+    # python train.py --test --input "MiraLAX vs. Golytely: is there a significant difference in the adenoma detection rate?" --max_length 256 --temperature 0.7
     parser.add_argument("--test", action="store_true",
                       help="进入交互测试模式")
     parser.add_argument("--input", type=str, default=None,
@@ -86,6 +86,11 @@ if __name__ == "__main__":
                       help="生成文本的最大长度")
     parser.add_argument("--temperature", type=float, default=0.7,
                       help="生成温度（0.1-1.0）")
+    
+    # DeepSpeed
+    # deepspeed --num_gpus 2 --master_port 29500 train.py --epochs 5 --output_dir ./medqa-model
+    parser.add_argument("--local_rank", type=int, default=-1,
+                       help="Local rank passed from distributed launcher")
     
     args = parser.parse_args()
     
