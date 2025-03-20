@@ -52,7 +52,7 @@ conda activate med-llm
 * **Production Readiness**: Modularized code into configurable components (`modeling.py`, `data_utils.py`) for seamless cloud migration; verified CLI execution (`!python train.py --epochs 1 --eval_only`) before deployment.
 
 ### **2. Distributed Training (Lambda Lab + DeepSpeed)**
-Scale training to multiple GPUs using DeepSpeed ZeRO-3 for memory optimization.
+**Objective**: Scale training to multiple GPUs using DeepSpeed ZeRO-3 for memory optimization. A 2×A100 (40GB) multi-GPU instance was deployed using Lambda Cloud, and DeepSpeed ZeRO-3 with CPU offloading was implemented to reduce the per-GPU memory footprint. 
 
 * DeepSpeed Integration:
     ```
@@ -67,11 +67,9 @@ Scale training to multiple GPUs using DeepSpeed ZeRO-3 for memory optimization.
     ```
 * Launch Command:
     ```
-    deepspeed --num_gpus=8 train.py \
-    --deepspeed configs/deepspeed_z3.json \
-    --model_name meta-llama/Llama-2-7b-hf \
-    --use_peft \
-    --peft_method lora
+    deepspeed --num_gpus=2 train.py \
+    --master_port 29500 train.py --epochs 50 \
+    --output_dir ./medqa-model 
     ```
 
 ### **3. Model Evaluation & Optimization**
