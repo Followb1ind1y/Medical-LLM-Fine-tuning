@@ -23,19 +23,72 @@ This project fine-tunes LLaMA-2-7B using QLoRA on PubMedQA, leveraging UMLS-base
 ## **🗂️ Project Structure**
 ```
 med-llm-finetuning/
-├── data/
-│   ├── raw_pubmed/         # Original PubMed abstracts
-│   ├── processed/         # Normalized text with entity masks
-│   └── augmented/         # Synthetically enhanced samples
-├── configs/               # QLoRA hyperparameters
-├── scripts/
-│   ├── preprocess.py      # UMLS alignment pipeline
-│   ├── train_qlora.py     # Distributed training script
-│   └── optimize_onnx.py   # Model export utilities
-└── deployment/
-    ├── Dockerfile         # Containerization setup
-    └── api_server.py      # FastAPI inference endpoint
+├── congifs/
+│   ├── lora_config.py
+│   ├── training_config.py
+│   └── deepspeed_z3.json
+├── src/
+│   ├── data_utils.py
+│   ├── inference.py
+│   └── modeling.py
+├── PubMedQA_Fine_Tuning.ipynb
+├── environment.yml
+├── train.py
 ```
+
+---
+## **📦 Enviroment Setup**
+```
+conda env create -f environment.yml
+conda activate med-llm
+```
+
+---
+## **🚀 Workflow**
+
+---
+### **1. Colab Prototyping**
+**Objective**: Rapidly validate the QLoRA fine-tuning pipeline on a PubMedQA subset using free Colab GPUs (T4). 
+
+* **Dataset Curation**: Processed PubMedQA into Llama-3 instruction format while preserving clinical context; applied stratified 90/10 train-test splits to maintain label distribution.
+* **QLoRA Configuration**: Initialized 4-bit quantization with `BitsAndBytesConfig` using `compute_dtype=bfloat16` for stability; optimized LoRA rank (`r=16`) and scaling (`alpha=32`) via ablation studies on the data.
+* **Training Pipeline**: Engineered `SFTTrainer` with gradient checkpointing and small batch size to fit T4 VRAM constraints; validated convergence through loss reduction.
+* **Checkpoint Reliability**: Ensured fault tolerance by testing resume-from-checkpoint functionality (`trainer.train(resume_from_checkpoint=True)`).
+* **Production Readiness**: Modularized code into configurable components (`modeling.py`, `data_utils.py`) for seamless cloud migration; verified CLI execution (`!python train.py --epochs 1 --eval_only`) before deployment.
+
+[PubMedQA Fine-Tuning](https://github.com/Followb1ind1y/Medical-LLM-Fine-tuning/blob/main/PubMedQA_Fine_Tuning.ipynb) | <a href="https://colab.research.google.com/drive/1nTfURgLHIdXFTVDZsoKdOugEvxmHBAkB?usp=sharing"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="colab"/></a>
+
+---
+### **2. Distributed Training (Lambda Lab + DeepSpeed)**
+Scale training to multiple GPUs using DeepSpeed ZeRO-3 for memory optimization.
+
+* DeepSpeed Integration:
+    ```
+    // configs/deepspeed_z3.json
+    {
+    "fp16": {"enabled": true},
+    "zero_optimization": {
+        "stage": 3,
+        "offload_optimizer": {"device": "cpu"}
+    }
+    }
+    ```
+* Launch Command:
+    ```
+    deepspeed --num_gpus=8 train.py \
+    --deepspeed configs/deepspeed_z3.json \
+    --model_name meta-llama/Llama-2-7b-hf \
+    --use_peft \
+    --peft_method lora
+    ```
+
+---
+### **3. Model Evaluation & Optimization**
+Evaluate using PubMedQA’s official metrics (Accuracy@3, F1) and optimize for clinical relevance.
+
+---
+### **4. Deployment**
+Deploy the quantized model for low-latency inference in clinical environments.
 
 ---
 ## **sudo Notes**
