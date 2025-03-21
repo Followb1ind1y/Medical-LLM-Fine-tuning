@@ -78,6 +78,8 @@ conda activate med-llm
 * **Fine-Tuned Model Output Example**:
     ```
     Question: Percutaneous ethanol injection for benign cystic thyroid nodules: is aspiration of ethanol-mixed fluid advantageous?
+    Context: We evaluated the differences between percutaneous ethanol injection with and without aspiration of ethanol-mixed fluid for treatment ...
+    
     Final Decision: No
     Long Answer: Percutaneous ethanol injection (PEI) is an effective treatment for benign cystic thyroid nodules, but the advantage of aspirating ethanol-mixed fluid remains unclear. Some studies suggest that aspiration may reduce ethanol diffusion and improve therapeutic outcomes, while others find no significant difference in efficacy. Further research is needed to determine its clinical benefit.
     ```
@@ -96,3 +98,8 @@ conda activate med-llm
 
 ### **4. Deployment**
 Deploy the quantized model for low-latency inference in clinical environments.
+
+
+## **Licence**
+
+This repository is licensed under the Apache-2.0 License - see the [LICENSE](https://github.com/Followb1ind1y/Medical-LLM-Fine-tuning/LICENSE) file for details.
