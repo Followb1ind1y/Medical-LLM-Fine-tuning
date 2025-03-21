@@ -97,7 +97,9 @@ conda activate med-llm
     | BERTScore (F1)     | 0.661           | 0.723            |
 
 ### **4. Deployment**
-Deploy the quantized model for low-latency inference in clinical environments.
+**Objective**: Make the quantized model ready for low-latency inference in clinical environments.
+* **Accelerated Inference with vLLM**: Implemented vLLM to enable high-throughput, low-latency inference, leveraging PagedAttention for optimized memory management.
+* **Containerized Deployment**: Encapsulated the inference pipeline into a Docker container, ensuring a portable and scalable solution across cloud platforms.
 
 
 ## **📃 Licence**

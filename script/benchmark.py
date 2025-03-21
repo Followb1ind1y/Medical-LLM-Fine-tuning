@@ -9,8 +9,7 @@ def test_vllm():
         "max_tokens": 256,
         "temperature": 0.3
     }
-    
-    # 测试100次请求
+
     latencies = []
     for _ in range(100):
         start = time.time()
@@ -25,7 +24,7 @@ def test_huggingface():
     generator = pipeline("text-generation", model="./hf_model")
     
     start = time.time()
-    for _ in range(10):  # 原生实现较慢，减少测试次数
+    for _ in range(10): 
         generator("Percutaneous ethanol injection for benign cystic thyroid nodules: is aspiration of ethanol-mixed fluid advantageous?", max_length=256)
     
     avg_time = (time.time() - start)/10
