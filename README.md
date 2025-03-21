@@ -100,6 +100,6 @@ conda activate med-llm
 Deploy the quantized model for low-latency inference in clinical environments.
 
 
-## **Licence**
+## **📃 Licence**
 
 This repository is licensed under the Apache-2.0 License - see the [LICENSE](https://github.com/Followb1ind1y/Medical-LLM-Fine-tuning/LICENSE) file for details.

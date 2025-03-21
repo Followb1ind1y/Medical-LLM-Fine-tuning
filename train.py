@@ -7,6 +7,7 @@ from src.modeling import load_model_and_tokenizer
 from src.inference import interactive_test
 from src.eval import DualEvaluationCallback, comprehensive_evaluation
 from trl import SFTTrainer, DataCollatorForCompletionOnlyLM
+from vllm import LLM
 
 # import os
 # os.environ["MASTER_ADDR"] = "localhost"
@@ -67,6 +68,20 @@ def main(args):
         trainer.train(resume_from_checkpoint=True)
     else:
         trainer.train()
+
+    if not args.eval_only and not args.test:
+        # 合并LoRA权重
+        model = model.merge_and_unload()
+        
+        # 保存HuggingFace格式
+        model.save_pretrained(args.output_dir, safe_serialization=True)
+        tokenizer.save_pretrained(args.output_dir)
+        
+        vllm_model = LLM(model=args.output_dir, 
+                        tokenizer=args.output_dir,
+                        quantization="awq",
+                        enforce_eager=True)  # 兼容性模式
+        vllm_model.save("./vllm_model")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
