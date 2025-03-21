@@ -73,7 +73,26 @@ conda activate med-llm
     ```
 
 ### **3. Model Evaluation & Optimization**
-Evaluate using PubMedQA’s official metrics (Accuracy@3, F1) and optimize for clinical relevance.
+**Objective**: Evaluate using PubMedQA’s official metrics (Accuracy, F1) while also assessing long-answer generation quality with ROUGE and BERTScore to optimize for clinical relevance.
+
+* **Fine-Tuned Model Output Example**:
+    ```
+    Question: Percutaneous ethanol injection for benign cystic thyroid nodules: is aspiration of ethanol-mixed fluid advantageous?
+    Final Decision: No
+    Long Answer: Percutaneous ethanol injection (PEI) is an effective treatment for benign cystic thyroid nodules, but the advantage of aspirating ethanol-mixed fluid remains unclear. Some studies suggest that aspiration may reduce ethanol diffusion and improve therapeutic outcomes, while others find no significant difference in efficacy. Further research is needed to determine its clinical benefit.
+    ```
+
+* **Classification** 
+    | Metric                | Base LLAMA-3-8B | Fine-Tuned Model |
+    |-----------------------|----------------|------------------|
+    | Accuracy(%)         | 62.8           | 78.1            |
+    | Macro-F1(%)           | 58.4            | 73.6             |
+
+* **Generation**
+    | Metric                | Base LLAMA-3-8B | Fine-Tuned Model |
+    |-----------------------|----------------|------------------|     
+    | ROUGE (F1)       | 0.412           | 0.587            |
+    | BERTScore (F1)     | 0.661           | 0.723            |
 
 ### **4. Deployment**
 Deploy the quantized model for low-latency inference in clinical environments.
