@@ -45,7 +45,7 @@ group_by_length = True
 save_steps = 100
 
 # Log every X updates steps
-logging_steps = 50
+logging_steps = 20
 
 # Enable fp16/bf16 training (set bf16 to True with an A100)
 fp16 = True

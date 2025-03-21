@@ -5,14 +5,15 @@ from configs.training_args import get_training_args
 from src.data_utils import load_and_process_data
 from src.modeling import load_model_and_tokenizer
 from src.inference import interactive_test
+from src.eval import DualEvaluationCallback, comprehensive_evaluation
 from trl import SFTTrainer, DataCollatorForCompletionOnlyLM
 
-# import os
-# os.environ["MASTER_ADDR"] = "localhost"
-# os.environ["MASTER_PORT"] = "9994"  # modify if RuntimeError: Address already in use
-# os.environ["RANK"] = "0"
-# os.environ["LOCAL_RANK"] = "0"
-# os.environ["WORLD_SIZE"] = "1"
+import os
+os.environ["MASTER_ADDR"] = "localhost"
+os.environ["MASTER_PORT"] = "9994"  # modify if RuntimeError: Address already in use
+os.environ["RANK"] = "0"
+os.environ["LOCAL_RANK"] = "0"
+os.environ["WORLD_SIZE"] = "1"
 
 def main(args):
     if args.resume_from_checkpoint:
@@ -54,9 +55,11 @@ def main(args):
         data_collator=collator,
         args=training_args,
     )
+    trainer.add_callback(DualEvaluationCallback(tokenizer, dataset["test"]))
 
     if args.eval_only:
         trainer.evaluate()
+        comprehensive_evaluation(trainer.model, tokenizer, dataset["test"])
     elif args.resume_from_checkpoint:
         trainer.train(resume_from_checkpoint=True)
     else:
