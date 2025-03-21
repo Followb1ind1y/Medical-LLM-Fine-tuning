@@ -43,8 +43,8 @@ def load_model_and_tokenizer(model_name="meta-llama/Meta-Llama-3-8B"):
         trust_remote_code=True
     )
     # 分布式训练需要的手动设备分配
-    # local_rank = int(os.environ.get("LOCAL_RANK", 0))
-    # model = model.to(f"cuda:{local_rank}")
+    local_rank = int(os.environ.get("LOCAL_RANK", 0))
+    model = model.to(f"cuda:{local_rank}")
     model.config.use_cache = False
     model.resize_token_embeddings(len(tokenizer))
     

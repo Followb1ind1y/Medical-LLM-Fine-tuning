@@ -8,12 +8,12 @@ from src.inference import interactive_test
 from src.eval import DualEvaluationCallback, comprehensive_evaluation
 from trl import SFTTrainer, DataCollatorForCompletionOnlyLM
 
-import os
-os.environ["MASTER_ADDR"] = "localhost"
-os.environ["MASTER_PORT"] = "9994"  # modify if RuntimeError: Address already in use
-os.environ["RANK"] = "0"
-os.environ["LOCAL_RANK"] = "0"
-os.environ["WORLD_SIZE"] = "1"
+# import os
+# os.environ["MASTER_ADDR"] = "localhost"
+# os.environ["MASTER_PORT"] = "9994"  # modify if RuntimeError: Address already in use
+# os.environ["RANK"] = "0"
+# os.environ["LOCAL_RANK"] = "0"
+# os.environ["WORLD_SIZE"] = "1"
 
 def main(args):
     if args.resume_from_checkpoint:
@@ -21,18 +21,21 @@ def main(args):
     else:
         model, tokenizer = load_model_and_tokenizer()
 
+    dataset = load_and_process_data()
+
     if args.test:
+        my_context = ' '.join(dataset["test"][args.input]['context']['contexts'])
+        my_question = dataset["test"][args.input]['question']
         interactive_test(
             model, 
             tokenizer,
-            input= args.input,
+            context= my_context,
+            question=my_question,
             max_length=args.max_length,
             temperature=args.temperature
         )
         return
 
-
-    dataset = load_and_process_data()
     peft_config = get_peft_config()
     training_args = get_training_args(args.output_dir, args.epochs)
 
@@ -72,7 +75,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=3)
     parser.add_argument("--output_dir", type=str, default="./results")
     # 从检查点恢复训练
-    # python train.py --output_dir ./medqa-model --resume_from_checkpoint ./medqa-model/checkpoint-1000
+    # python train.py --output_dir ./medqa-model --resume_from_checkpoint ./medqa-model/checkpoint-224
     parser.add_argument("--resume_from_checkpoint", type=str, default=None,
                        help="Path to specific checkpoint directory")
     # 仅评估测试集
@@ -80,10 +83,10 @@ if __name__ == "__main__":
     parser.add_argument("--eval_only", action="store_true", 
                        help="Only run evaluation on the test set")
     # 交互测试模式
-    # python train.py --test --input "MiraLAX vs. Golytely: is there a significant difference in the adenoma detection rate?" --max_length 256 --temperature 0.7
+    # python train.py --test --input 1 --max_length 256 --temperature 0.7
     parser.add_argument("--test", action="store_true",
                       help="进入交互测试模式")
-    parser.add_argument("--input", type=str, default=None,
+    parser.add_argument("--input", type=int, default=0,
                       help="问题")
     parser.add_argument("--max_length", type=int, default=512,
                       help="生成文本的最大长度")

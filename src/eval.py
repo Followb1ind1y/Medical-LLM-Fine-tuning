@@ -1,7 +1,8 @@
-from transformers import TrainerCallback
-from sklearn.metrics import accuracy_score, f1_score
-from rouge import Rouge
 import re
+from transformers import TrainerCallback
+from sklearn.metrics import accuracy_score, f1_score, classification_report
+from rouge import Rouge
+from bert_score import score as bert_score
 
 class DualEvaluationCallback(TrainerCallback):
     def __init__(self, tokenizer, test_dataset):
@@ -59,7 +60,7 @@ def comprehensive_evaluation(model, tokenizer, test_dataset):
     
     for example in test_dataset:
         inputs = tokenizer(example["text"], return_tensors="pt").to(model.device)
-        outputs = model.generate(**inputs, max_new_tokens=400)
+        outputs = model.generate(**inputs, max_new_tokens=400, pad_token_id=tokenizer.pad_token_id,eos_token_id=tokenizer.eos_token_id)
         full_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
         
         # 解析预测
