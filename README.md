@@ -2,21 +2,22 @@
 
 ## **🔍 About**
 
-Medical question-answering (QA) presents unique challenges, including complex medical terminology, data scarcity, and the need for high accuracy. Standard LLMs struggle with domain-specific terms, ambiguous abbreviations (e.g., MI for Myocardial Infarction vs. Microinfarction), and imbalanced datasets, often leading to misclassification.
+Fine-tuning large language models (LLMs) for medical question-answering (QA) presents unique challenges, such as domain-specific terminology, data scarcity, and the necessity for high clinical accuracy. Standard LLMs often misinterpret ambiguous abbreviations (e.g., “RA” for Rheumatoid Arthritis vs. Right Atrium) or struggle with long-form reasoning required in clinical settings.
 
-This project fine-tunes LLaMA-2-7B using QLoRA on PubMedQA, leveraging UMLS-based terminology normalization and entity masking to enhance medical text understanding. Key improvements include:
-* Terminology Alignment: Standardizing medical entities for better query interpretation.
-* Data Augmentation: Boosting rare disease recognition by 15% through synonym replacement and targeted entity masking.
-* Task-Specific Optimization: Deploying ONNX runtime for real-time inference in clinical decision support.
+This project fine-tunes LLaMA-3-8B on PubMedQA using QLoRA for efficient adaptation, optimizing both classification and long-answer generation. The workflow integrates scalable training, robust evaluation, and optimized deployment for real-world clinical inference. Key improvements include:
+* **QLoRA Fine-Tuning on PubMedQA**: Efficient low-rank adaptation with 4-bit quantization, optimized for clinical decision-making.
+* **Distributed Training with DeepSpeed**: Multi-GPU scaling on Lambda Cloud (2×A100 40GB) with memory-efficient CPU offloading.
+* **Task-Specific Evaluation**: Beyond accuracy/F1, measured long-answer coherence using ROUGE and BERTScore to optimize clinical relevance.
+* **vLLM-Accelerated Inference**: Deployed with PagedAttention for low-latency, high-throughput medical text generation.
 
 
-> **Example**: **Fine-tuning Impact**
+<!-- > **Example**: **Fine-tuning Impact**
 >
 > * **Query**: Does metformin help with weight loss in type 2 diabetes patients?
 > * **Base LLM Output**: “Metformin lowers blood sugar and improves insulin sensitivity.” (Generic and lacks specificity)
 > * **Fine-Tuned Model Output**: “Yes, clinical studies indicate Metformin can reduce weight by 2-3 kg over six months, likely due to improved insulin sensitivity and appetite suppression. Consultation is recommended.” (Cites research, provides a quantified answer, and aligns with clinical best practices)
 >
-> By aligning medical QA models with real-world clinical reasoning, this project aims to bridge the gap between AI and healthcare applications.
+> By aligning medical QA models with real-world clinical reasoning, this project aims to bridge the gap between AI and healthcare applications. -->
 
 ## **🗂️ Project Structure**
 ```
